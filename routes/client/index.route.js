@@ -2,6 +2,7 @@
 const productRoutes = require("./product.route.js")
 const homeRoutes = require("./home.route.js")
 
+// viết 1 hàm để export nó ra để file index.js có thể dùng = cách require (import)
 module.exports = (app) => {
   app.get("/", homeRoutes);
   
