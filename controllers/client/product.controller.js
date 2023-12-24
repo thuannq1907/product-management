@@ -1,22 +1,28 @@
+const Product = require("../../models/product.model");
+
 // [GET] /products/
-module.exports.index = (req, res) => {
+module.exports.index = async (req, res) => {
+  const products = await Product.find({
+    status: "active",
+    deleted: false
+    // 2 tiêu chí: còn hoạt động và chưa bị xóa
+  });
+  // nếu find({}) => lấy hết còn nếu muốn lấy theo tiêu chí gì thì thêm nó vào trong find({})
+
+  for (const item of products) {
+    // add thêm key mới là priceNew
+    item.priceNew = item.price * (1 - item.discountPercentage/100);
+    item.priceNew = item.priceNew.toFixed(0);
+    // lấy 0 số sau dấu phẩy
+  }
+
+  console.log(products);
+
   res.render("client/pages/products/index.pug", {
-    pageTitle: "Trang danh sách sản phẩm"
+    pageTitle: "Trang danh sách sản phẩm",
+    products: products
   });
 }
 
-// [GET] /products/detail
-module.exports.detail = (req, res) => {
-  res.send("Trang chi tiết sản phẩm");
-}
 
-// [GET] /products/edit
-module.exports.edit = (req, res) => {
-  
-}
-
-// [GET] /products/create
-module.exports.create = (req, res) => {
-  
-}
 
