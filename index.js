@@ -7,6 +7,7 @@ dotenv.config();
 database.connect();
 
 const routesClient = require("./routes/client/index.route.js");
+const routesAdmin = require("./routes/admin/index.route.js");
 
 
 const port = process.env.PORT;
@@ -21,6 +22,9 @@ app.use(express.static("public"));
 
 // Routes Client
 routesClient(app);
+
+// Routes Admin
+routesAdmin(app);
 
 app.listen(port, () => {
   console.log(`App listening on ${port}`);
