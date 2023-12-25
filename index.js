@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const database = require("./config/database.js")
+const systemConfig = require("./config/system.js")
 
 dotenv.config();
 
@@ -19,6 +20,9 @@ app.set("views", "./views");
 app.set("view engine", "pug");
 
 app.use(express.static("public"));
+
+// App local variables => tạo ra biến toàn cục, sd trong mọi file
+app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
 // Routes Client
 routesClient(app);
