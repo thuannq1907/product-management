@@ -27,3 +27,28 @@ if(buttonStatus.length > 0) {
 }
 
 // End Button Status
+
+
+
+
+// Form Search
+const formSearch = document.querySelector("#form-search");
+if(formSearch){
+  formSearch.addEventListener("submit", (event) => {
+    let url = new URL(window.location.href);
+
+    event.preventDefault();
+    // ngăn chặn hành vi mặc định - load lại trang để k bị ghi đè
+
+    const keyword = event.target.elements.keyword.value;
+    // lấy ra đc keyword user nhập vào
+    if(keyword) {
+      url.searchParams.set("keyword", keyword);
+    } else {
+      url.searchParams.delete("keyword");
+    }
+
+    window.location.href = url.href;
+  })
+}
+// End Form Search
