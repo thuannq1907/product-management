@@ -58,3 +58,22 @@ module.exports.index = async (req, res) => {
     res.redirect(`/${systemConfig.prefixAdmin}/products`)
   }
 }
+
+// [GET] /admin/products/change-status/:status/:id
+module.exports.changeStatus = async (req, res) => {
+  console.log(req.params);
+  const status = req.params.status;
+  const id = req.params.id;
+
+  console.log(status);
+  console.log(id);
+
+  // Thay đổi thuộc tính trong database
+  await Product.updateOne({
+    _id: id
+  } , {
+    status: status
+  });
+
+  res.redirect("back");
+}

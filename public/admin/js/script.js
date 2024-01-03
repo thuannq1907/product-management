@@ -73,3 +73,31 @@ if(buttonPagination.length > 0){
   })
 }
 // End Pagination
+
+
+
+
+// button-change-status
+const buttonsChangeStatus = document.querySelectorAll("[button-change-status]");
+if(buttonsChangeStatus.length > 0){
+
+  const formChanggeStatus = document.querySelector("[form-change-status]");
+  const path = formChanggeStatus.getAttribute("data-path");
+
+  buttonsChangeStatus.forEach(button => {
+    button.addEventListener("click", () => {
+      const statusCurrent = button.getAttribute("data-status");
+      const id = button.getAttribute("data-id");
+
+      const statusChange = (statusCurrent == "active" ? "inactive" : "active")
+
+      const action = `${path}/${statusChange}/${id}`;
+
+      formChanggeStatus.action = action;
+
+      formChanggeStatus.submit();
+    });
+  })
+}
+
+// End button-change-status
