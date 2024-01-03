@@ -91,7 +91,8 @@ if(buttonsChangeStatus.length > 0){
 
       const statusChange = (statusCurrent == "active" ? "inactive" : "active")
 
-      const action = `${path}/${statusChange}/${id}`;
+      const action = `${path}/${statusChange}/${id}?_phuongThuc=PATCH`;
+      // => Bắt ngta nhập đúng phương thức mới cho cập nhật => an toàn hơn
 
       formChanggeStatus.action = action;
 

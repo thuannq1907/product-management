@@ -1,5 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
+var methodOverride = require('method-override');
 const database = require("./config/database.js")
 const systemConfig = require("./config/system.js")
 
@@ -15,6 +16,8 @@ const port = process.env.PORT;
 
 const app = express();
 // const port = 3000;
+
+app.use(methodOverride('_phuongThuc'));
 
 app.set("views", "./views");
 app.set("view engine", "pug");
