@@ -1,8 +1,9 @@
 const express = require("express");
 const dotenv = require("dotenv");
 var methodOverride = require('method-override');
-const database = require("./config/database.js")
-const systemConfig = require("./config/system.js")
+var bodyParser = require('body-parser');
+const database = require("./config/database.js");
+const systemConfig = require("./config/system.js");
 
 dotenv.config();
 
@@ -16,6 +17,9 @@ const port = process.env.PORT;
 
 const app = express();
 // const port = 3000;
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(methodOverride('_phuongThuc'));
 
