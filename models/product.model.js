@@ -10,7 +10,8 @@ const productSchema = new mongoose.Schema({
   thumbnail: String,
   status: String,
   position: Number,
-  deleted: Boolean
+  deleted: Boolean,
+  deletedAt: Date
 });
 
 // Tạo ra 1 model tên là Product (là cái bên trong mongoose.model("Product", productSchema) còn cái bên ngoài chỉ để lưu trữ), tham số thứ 3 là tên collection trong database mà nó sẽ lấy ra
