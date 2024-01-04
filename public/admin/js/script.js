@@ -81,8 +81,8 @@ if(buttonPagination.length > 0){
 const buttonsChangeStatus = document.querySelectorAll("[button-change-status]");
 if(buttonsChangeStatus.length > 0){
 
-  const formChanggeStatus = document.querySelector("[form-change-status]");
-  const path = formChanggeStatus.getAttribute("data-path");
+  const formChangeStatus = document.querySelector("[form-change-status]");
+  const path = formChangeStatus.getAttribute("data-path");
 
   buttonsChangeStatus.forEach(button => {
     button.addEventListener("click", () => {
@@ -91,7 +91,7 @@ if(buttonsChangeStatus.length > 0){
 
       const statusChange = (statusCurrent == "active" ? "inactive" : "active")
 
-      const action = `${path}/${statusChange}/${id}?_phuongThuc=PATCH`;
+      const action = `${path}/${statusChange}/${id}?_method=PATCH`;
       // => Bắt ngta nhập đúng phương thức mới cho cập nhật => an toàn hơn
 
       formChanggeStatus.action = action;

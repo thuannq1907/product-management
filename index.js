@@ -21,7 +21,7 @@ const app = express();
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
-app.use(methodOverride('_phuongThuc'));
+app.use(methodOverride('_method'));
 
 app.set("views", "./views");
 app.set("view engine", "pug");

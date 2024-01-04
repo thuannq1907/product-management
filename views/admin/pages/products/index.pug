@@ -19,7 +19,7 @@ block main
   .card.mb-3
     .card-header Danh sách
     .card-body
-      +form-change-multi(`/${prefixAdmin}/products/change-multi?_phuongThuc=PATCH`)
+      +form-change-multi(`/${prefixAdmin}/products/change-multi?_method=PATCH`)
 
       table.table.table-hover.table-sm(checkbox-multi)
         thead
