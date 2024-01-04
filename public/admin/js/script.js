@@ -154,6 +154,16 @@ if(formChangeMulti) {
   formChangeMulti.addEventListener("submit", (event) => {
     event.preventDefault();
 
+    // value của option
+    const type = event.target.elements.type.value;
+    if(type == "delete-all"){
+      const isConfirm = confirm("Bạn có chắc muốn xóa những bản ghi này?");
+      if(isConfirm == false) {
+        return;
+      }
+    }
+    // Nếu ngta confirm là true thì thực hiện các câu lệnh bên dưới để lấy data
+
     // lấy ra các ô input đã check
     const inputsChecked = document.querySelectorAll("input[name='id']:checked");
     if(inputsChecked.length > 0){
