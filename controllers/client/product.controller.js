@@ -6,6 +6,8 @@ module.exports.index = async (req, res) => {
     status: "active",
     deleted: false
     // 2 tiêu chí: còn hoạt động và chưa bị xóa
+  }).sort({
+    position: "desc"
   });
   // nếu find({}) => lấy hết còn nếu muốn lấy theo tiêu chí gì thì thêm nó vào trong find({})
 

@@ -94,9 +94,9 @@ if(buttonsChangeStatus.length > 0){
       const action = `${path}/${statusChange}/${id}?_method=PATCH`;
       // => Bắt ngta nhập đúng phương thức mới cho cập nhật => an toàn hơn
 
-      formChanggeStatus.action = action;
+      formChangeStatus.action = action;
 
-      formChanggeStatus.submit();
+      formChangeStatus.submit();
     });
   })
 }
@@ -156,6 +156,7 @@ if(formChangeMulti) {
 
     // value của option
     const type = event.target.elements.type.value;
+    console.log(type);
     if(type == "delete-all"){
       const isConfirm = confirm("Bạn có chắc muốn xóa những bản ghi này?");
       if(isConfirm == false) {
@@ -171,7 +172,17 @@ if(formChangeMulti) {
 
       inputsChecked.forEach(input => {
         const id = input.value;
-        ids.push(id);
+        if(type=="change-position"){
+          // từ thẻ input có name='id' thì phải đi ra khỏi thẻ td, đến thẻ tr rồi mới bắt đầu từ thẻ tr đi tìm thẻ input có name='position'
+          // input.closest("tr") nghĩa là đi ra đến thẻ tr rồi querySelector đến input có name='position'
+          const position = input
+            .closest("tr")
+            .querySelector("input[name='position']").value;
+            
+          ids.push(`${id}-${position}`);
+        } else {
+          ids.push(id);
+        }
       });
 
       const inputIds = formChangeMulti.querySelector("input[name='ids']");

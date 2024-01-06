@@ -40,6 +40,10 @@ module.exports.index = async (req, res) => {
 
 
     const products = await Product.find(find)
+      .sort({
+        // Sắp xếp theo tiêu chí vị trí mặc định là tăng dần (asc) hoặc giảm dần (desc)
+        position: "desc"
+      })
       .limit(objectPagination.limitItems)
       .skip(objectPagination.skip);
     // limit: giới hạn bn item 1 trang
@@ -103,6 +107,21 @@ module.exports.changeMulti = async (req, res) => {
           deleted: true,
           deletedAt: new Date()
         });
+      break;
+    case "change-position":
+      for (const item of ids) {
+        // split("-") tách id và position ra thành 1 mảng
+        // Sử dụng Destructuring để lấy id và position trong mảng
+        let [id, position] = item.split("-");
+        // let để có thể chuyển position từ string về number
+        position = parseInt(position);
+
+        await Product.updateOne({
+          _id: id
+        } , {
+          position: position
+        })
+      }
       break;
     default:
       break;
