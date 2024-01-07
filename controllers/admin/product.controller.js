@@ -79,6 +79,9 @@ module.exports.changeStatus = async (req, res) => {
     status: status
   });
 
+  req.flash('success', 'Cập nhật trạng thái thành công');
+  // req.flash(key , nội dung thông báo in ra)
+
   res.redirect("back");
 }
 
@@ -126,6 +129,8 @@ module.exports.changeMulti = async (req, res) => {
     default:
       break;
   }
+
+  req.flash('success', 'Cập nhật trạng thái thành công');
 
   res.redirect("back");
 }
