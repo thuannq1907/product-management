@@ -240,3 +240,76 @@ if(showAlert){
 
 
 // End Show Alert
+
+
+// Recover 1 Item
+const buttonRecover = document.querySelectorAll("[button-recover]");
+if(buttonRecover.length > 0){
+  buttonRecover.forEach(button => {
+    button.addEventListener("click", () => {
+      const isConfirm = confirm("Bạn có chắc muốn khôi phục bản ghi này?"); 
+        
+      if(isConfirm){
+        const id = button.getAttribute("data-id");
+  
+        const formRecover = document.querySelector("[form-recover-item]");
+        const path = formRecover.getAttribute("data-path");
+  
+        const action = `${path}/${id}?_method=PATCH`;
+        formRecover.action = action;
+  
+        formRecover.submit();
+      }
+    })
+  })
+}
+// End Recover 1 Item
+
+
+
+// Recover Multi
+const formRecoverMulti = document.querySelector("[form-recover-multi]");
+if(formRecoverMulti) {
+  const idRecover = [];
+  formRecoverMulti.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const type = event.target.elements.type.value;
+    console.log(type);
+
+    const inputChecked = document.querySelectorAll("input[name='id']:checked");
+    inputChecked.forEach(input => {
+      idRecover.push(input.value);
+    })
+
+    const inputRecover = formRecoverMulti.querySelector("input[name='idRecover']");
+    inputRecover.value = idRecover.join(", ");
+
+    formRecoverMulti.submit();
+  })
+}
+// End Recover Multi
+
+
+
+// button delete forever
+const buttonDeleteForever = document.querySelectorAll("[button-delete-forever]");
+if(buttonDeleteForever.length > 0){
+  const formDeleteForever = document.querySelector("[form-delete-forever]");
+  const path = formDeleteForever.getAttribute("data-path");
+
+  buttonDeleteForever.forEach(button => {
+    button.addEventListener("click", () => {
+      const isConfirm = confirm("Bạn có chắc muốn xóa vĩnh viễn bản ghi này");
+      if(isConfirm){
+        const id = button.getAttribute("data-id");
+  
+        const action = `${path}/${id}?_method=DELETE`;
+        formDeleteForever.action = action;
+  
+        formDeleteForever.submit();
+      }
+    })
+  })
+}
+// End button delete forever
