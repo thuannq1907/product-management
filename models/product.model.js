@@ -1,8 +1,16 @@
 const mongoose = require("mongoose");
+const slug = require('mongoose-slug-updater');
+
+mongoose.plugin(slug);
 
 // Tạo ra 1 bộ khung để định nghĩa những key mà user phải nhập vào để thêm vào database, còn những key k đc định nghĩa thì k thêm được => lquan đến bảo mật (thêm data)
 const productSchema = new mongoose.Schema({
   title: String,
+  slug: {
+    type: String,
+    slug: "title",
+    unique: true
+  },
   description: String,
   price: Number,
   discountPercentage: Number,
@@ -15,6 +23,8 @@ const productSchema = new mongoose.Schema({
     default: false
   },
   deletedAt: Date
+} , { 
+  timestamps: true 
 });
 
 // Tạo ra 1 model tên là Product (là cái bên trong mongoose.model("Product", productSchema) còn cái bên ngoài chỉ để lưu trữ), tham số thứ 3 là tên collection trong database mà nó sẽ lấy ra
