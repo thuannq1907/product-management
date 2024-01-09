@@ -11,6 +11,4 @@ router.patch("/recover-multi", controller.recoverMulti);
 
 router.delete("/delete-forever/:id", controller.deleteForever);
 
-// router.delete("/delete-forever-multi", controller.recoverMulti);
-
 module.exports = router;

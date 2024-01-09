@@ -168,3 +168,37 @@ module.exports.deleteItem = async (req, res) => {
 
   res.redirect("back");
 }
+
+// [GET] /admin/products/create
+// => render giao diện
+module.exports.create = async (req, res) => {
+  res.render("admin/pages/products/create", {
+    pageTitle: "Thêm mới sản phẩm",
+  });
+};
+
+// [POST] /admin/products/create
+// => thêm mới sp vào database
+module.exports.createPost = async (req, res) => {
+  // chuyển dạng chuỗi -> số cho các key có value là number
+  req.body.price = parseInt(req.body.price);
+  req.body.discountPercentage = parseInt(req.body.discountPercentage);
+  req.body.stock = parseInt(req.body.stock);
+
+  // nếu user không nhập position -> mặc định tăng = cách tổng sp + 1
+  // nếu user có nhập position -> chuyển về dạng number
+  if(req.body.position == "") {
+    const countProducts = await Product.countDocuments();
+    req.body.position = countProducts + 1;
+  } else {
+    req.body.position = parseInt(req.body.position);
+  }
+
+  const product = new Product(req.body);
+  product.save();
+
+  
+  req.flash("success", "Thêm mới sản phẩm thành công!");
+
+  res.redirect(`/${systemConfig.prefixAdmin}/products`);
+};
