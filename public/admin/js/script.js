@@ -313,3 +313,22 @@ if(buttonDeleteForever.length > 0){
   })
 }
 // End button delete forever
+
+
+
+
+// Preview Image
+const uploadImage = document.querySelector("[upload-image]");
+if(uploadImage) {
+  const uploadImageInput = uploadImage.querySelector("[upload-image-input]");
+  const uploadImagePreview = uploadImage.querySelector("[upload-image-preview]");
+
+  uploadImageInput.addEventListener("change", (event) => {
+    // sd Destructuring lấy ra 1 file
+    const [file] = uploadImageInput.files;
+    if (file) {
+      uploadImagePreview.src = URL.createObjectURL(file);
+    }
+  });
+}
+// End Preview Image
