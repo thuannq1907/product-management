@@ -194,6 +194,12 @@ module.exports.createPost = async (req, res) => {
     req.body.position = parseInt(req.body.position);
   }
 
+
+  // Ktra upload file và tên file (link dẫn), Có thì add tên file đó vào req.body vì req.body chỉ chứa file text
+  if(req.file && req.file.filename){
+    req.body.thumbnail = `/uploads/${req.file.filename}`;
+  }
+
   const product = new Product(req.body);
   product.save();
 
