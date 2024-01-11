@@ -8,6 +8,7 @@ const upload = multer({ storage: storageMulter() });
 
 
 const controller = require("../../controllers/admin/product.controller.js");
+const validate = require("../../validates/admin/product.validate.js")
 
 // / <=> /admin/product/
 router.get("/", controller.index);
@@ -21,6 +22,12 @@ router.delete("/delete/:id", controller.deleteItem);
 
 router.get("/create", controller.create);
 
-router.post("/create", upload.single('thumbnail'), controller.createPost);
+// Khi vào route này thì sẽ cho vào validate.createPost trước rồi mới vào controller.createPost
+router.post(
+  "/create", 
+  upload.single('thumbnail'), 
+  validate.createPost,
+  controller.createPost
+);
 
 module.exports = router;
