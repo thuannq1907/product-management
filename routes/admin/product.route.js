@@ -14,7 +14,7 @@ const upload = multer();
 const controller = require("../../controllers/admin/product.controller.js");
 const validate = require("../../validates/admin/product.validate.js");
 
-const uploadCloud = require("../../middleware/admin/uploadCloud.middleware.js")
+const uploadCloud = require("../../middlewares/admin/uploadCloud.middleware.js")
 
 // / <=> /admin/product/
 router.get("/", controller.index);
@@ -32,7 +32,7 @@ router.get("/create", controller.create);
 router.post(
   "/create", 
   upload.single('thumbnail'),
-  uploadCloud.uploadSinger,
+  uploadCloud.uploadSingle,
   validate.createPost,
   controller.createPost
 );
@@ -42,7 +42,7 @@ router.get("/edit/:id", controller.edit);
 router.patch(
   "/edit/:id", 
   upload.single('thumbnail'),
-  uploadCloud.uploadSinger, 
+  uploadCloud.uploadSingle, 
   validate.createPost,
   controller.editPatch
 );

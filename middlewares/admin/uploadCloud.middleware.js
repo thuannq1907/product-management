@@ -9,7 +9,7 @@ cloudinary.config({
 });
 // End cloudinary
 
-module.exports.uploadSinger = (req, res, next) => {
+module.exports.uploadSingle = (req, res, next) => {
   if(req.file){
     let streamUpload = (req) => {
       return new Promise((resolve, reject) => {
