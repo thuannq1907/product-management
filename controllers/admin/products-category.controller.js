@@ -1,6 +1,8 @@
 const ProductCategory = require("../../models/product-category.model.js");
 const systemConfig = require("../../config/system");
 
+const createTreeHelper = require("../../helpers/create-tree.helper.js")
+
 // [GET] /admin/products-category
 module.exports.index = async (req, res) => {
   const records = await ProductCategory.find({
@@ -19,24 +21,7 @@ module.exports.create = async (req, res) => {
     deleted: false
   });
 
-  console.log(records);
-
-  function createTree(arr, parentId = "") {
-    const tree = [];
-    arr.forEach(item => {
-      if(item.parent_id === parentId) {
-        const newItem = item;
-        const children = createTree(arr, item.id);
-        if(children.length > 0){
-          newItem.children = children;
-        }
-        tree.push(newItem);
-      }
-    });
-    return tree;
-  };
-
-  const newRecords = createTree(records);
+  const newRecords = createTreeHelper(records);
 
   console.log(newRecords);
 
