@@ -6,6 +6,10 @@ mongoose.plugin(slug);
 // Tạo ra 1 bộ khung để định nghĩa những key mà user phải nhập vào để thêm vào database, còn những key k đc định nghĩa thì k thêm được => lquan đến bảo mật (thêm data)
 const productSchema = new mongoose.Schema({
   title: String,
+  product_category_id: {
+    type: String,
+    default: ""
+  },
   slug: {
     type: String,
     slug: "title",
