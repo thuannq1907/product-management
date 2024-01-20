@@ -2,6 +2,7 @@ const dashboardRoutes = require("./dashboard.route.js")
 const productRoutes = require("./product.route.js")
 const binRoutes = require("./bin.route.js")
 const productCategoryRoutes = require("./products-category.route.js")
+const roleRoutes = require("./role.route.js")
 
 const systemConfig = require("../../config/system.js")
 
@@ -15,4 +16,6 @@ module.exports = (app) => {
   app.use( `${PATH_ADMIN}/bin`, binRoutes);
 
   app.use( `${PATH_ADMIN}/products-category`, productCategoryRoutes);
+
+  app.use( `${PATH_ADMIN}/roles`, roleRoutes);
 }
