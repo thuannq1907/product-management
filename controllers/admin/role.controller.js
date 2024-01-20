@@ -27,3 +27,34 @@ module.exports.createPost = async (req, res) => {
 
   res.redirect(`/${systemConfig.prefixAdmin}/roles`);
 }
+
+// [GET] /admin/roles/edit/:id
+module.exports.edit = async (req, res) => {
+  try {
+    const record = await Role.findOne({
+      _id: req.params.id,
+      deleted: false
+    });
+  
+    res.render("admin/pages/roles/edit.pug", {
+      pageTitle: "Chỉnh sửa Nhóm quyền",
+      record: record
+    });
+  } catch (error) {
+    res.redirect(`/${systemConfig.prefixAdmin}/roles`);
+  }
+}
+
+// [PATCH] /admin/roles/edit/:id
+module.exports.editPatch = async (req, res) => {
+  try {
+    await Role.updateOne({
+      _id: req.params.id,
+      deleted: false
+    }, req.body);
+
+    res.redirect(`back`);
+  } catch (error) {
+    res.redirect(`/${systemConfig.prefixAdmin}/roles`);
+  }
+}
