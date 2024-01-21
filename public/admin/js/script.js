@@ -376,3 +376,94 @@ if(sort){
 }
 
 // End Sort select
+
+
+// Permissions
+const tablePermissions = document.querySelector("[table-permissions]");
+if(tablePermissions){
+  // Submit Data
+  const buttonSubmit = document.querySelector("[button-submit]");
+  buttonSubmit.addEventListener("click", () => {
+    const roles = [];
+
+    const rows = tablePermissions.querySelectorAll("[data-name]");
+    // lấy ra các thẻ tr (mỗi thẻ tr là 1 hàng) có thuộc tính là data-name chứa các ô input 
+
+    // lặp qua từng thẻ tr (từng hàng)
+    rows.forEach(row => {
+      const name = row.getAttribute("data-name");
+      // lặp qua từng hàng để lấy ra cái giá trị của data-name
+      const inputs = row.querySelectorAll("input");
+      // lấy ra hết các ô input của từng hàng
+
+      if(name == "id"){
+        // TH đặc biệt vì hàng 1 để data-name là id
+        inputs.forEach(input => {
+          const id = input.value;
+          roles.push({
+            id: id,
+            permissions: []
+          });
+        })
+      } else {
+        // TH còn lại là các quyền để add vào permissions
+        inputs.forEach((input, index) => {
+          // lặp qua các ô input trong hàng
+          // vì inputs chỉ có 2 ô input nên index chỉ có 0 và 1
+          if(input.checked){
+            // push các ô input đã check vào mảng permissions
+            roles[index].permissions.push(name);
+          }
+        })
+      }
+    });
+
+    const formChangePermissions = document.querySelector("[form-change-permissions]");
+    const inputRoles = formChangePermissions.querySelector("input[name='roles']");
+    inputRoles.value = JSON.stringify(roles);
+    formChangePermissions.submit();
+  });
+
+  // Data Default (sau khi cập nhật sẽ giữ nguyên các ô đã check chứ k bị biến mất)
+  const divRecords = document.querySelector("[data-records]");
+  if(divRecords) {
+    const records = JSON.parse(divRecords.getAttribute("data-records"));
+    // records là 1 mảng chứa 2 object chứa các quyền, lặp qua từng object (record) 1 để lấy ra permissions
+    records.forEach((record, index) => {
+      const permissions = record.permissions;
+      // permissions là 1 mảng các quyền, duyệt qua permission là duyệt qua từng quyền 1 
+
+      permissions.forEach(permission => {
+        const row = tablePermissions.querySelector(`[data-name="${permission}"]`);
+        // Tìm thẻ tr (tìm hàng) có data-name có name giống vs permission
+
+        const input = row.querySelectorAll("input");
+        // lấy ra tất cả các ô input trong hàng đó
+
+        input[index].checked = true;
+      });
+    });
+  }
+}
+// End Permissions
+
+// roles = [
+//   {
+//     id: "id quản trị viên",
+//     permissions: [
+//       "products-category_view",
+//       "products-category_create",
+//       "products-category_edit",
+//       "products-category_delete"
+//     ]
+//   },
+//   {
+//     id: "id quản lý sản phẩm",
+//     permissions: [
+//       "products-category_view",
+//       "products-category_create"
+//     ]
+//   }
+// ]
+// roles[0] là của id quản trị viên
+// roles[1] là của id quản lý sản phẩm

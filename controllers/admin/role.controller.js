@@ -65,8 +65,31 @@ module.exports.permissions = async (req, res) => {
     deleted: false
   });
 
+  console.log(records);
+
   res.render("admin/pages/roles/permissions.pug", {
     pageTitle: "Phân quyền",
     records: records
   });
+}
+
+// [PATCH] /admin/roles/permissions
+module.exports.permissionsPatch = async (req, res) => {
+  const roles = JSON.parse(req.body.roles);
+  // roles chính là name của ô input ở bên form submit, khi JSON.parse thì roles sẽ thành 1 mảng có 2 phần tử => lặp qua từng phần tử để update
+
+  try {
+    for (const item of roles) {
+      await Role.updateOne({
+        _id: item.id
+      }, {
+        permissions: item.permissions
+      })
+    }
+    req.flash("success", "Cập nhật phân quyền thành công!");
+  } catch (error) {
+    req.flash("success", "Cập nhật phân quyền không thành công!");
+  }
+  
+  res.redirect("back");
 }
