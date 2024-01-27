@@ -1,5 +1,6 @@
 const Product = require("../../models/product.model.js")
 const ProductCategory = require("../../models/product-category.model.js");
+const Account = require("../../models/account.model.js");
 const filterStateHelper = require("../../helpers/filter-state.helper.js");
 const paginationHelper = require("../../helpers/pagination.helper.js");
 const createTreeHelper = require("../../helpers/create-tree.helper");
@@ -55,8 +56,17 @@ module.exports.index = async (req, res) => {
       .sort(sort)
       .limit(objectPagination.limitItems)
       .skip(objectPagination.skip);
-    // limit: giới hạn bn item 1 trang
-    // skip: bỏ qua bn sp, vd: muốn đến trang 2 phải bỏ qua 4 sp, trang 1 bỏ qua 0 sp, Đây chính là vị trí muốn lấy
+
+    for (const product of products) {
+      const account = await Account.findOne({
+        _id: product.createdBy.accountId
+      });
+
+      if(account){
+        product.createdBy.fullName = account.fullName;
+        // createdBy là 1 object, add thêm key fullName để bt ng tạo
+      } 
+    }
 
 
     res.render("admin/pages/products/index.pug", {
@@ -195,13 +205,10 @@ module.exports.create = async (req, res) => {
 // [POST] /admin/products/create
 // => thêm mới sp vào database
 module.exports.createPost = async (req, res) => {
-  // chuyển dạng chuỗi -> số cho các key có value là number
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
 
-  // nếu user không nhập position -> mặc định tăng = cách tổng sp + 1
-  // nếu user có nhập position -> chuyển về dạng number
   if(req.body.position == "") {
     const countProducts = await Product.countDocuments();
     req.body.position = countProducts + 1;
@@ -209,18 +216,15 @@ module.exports.createPost = async (req, res) => {
     req.body.position = parseInt(req.body.position);
   }
 
-  // console.log(req.file);
-  // console.log(req.body);
-
-  // Ktra upload file và tên file (link dẫn), Có thì add tên file đó vào req.body vì req.body chỉ chứa file text => Lưu ở local
-  // if(req.file && req.file.filename){
-  //   req.body.thumbnail = `/uploads/${req.file.filename}`;
-  // }
+  // Thêm accountId để bt Id của ng tạo khi tạo mới sản phẩm
+  req.body.createdBy = {
+    accountId: res.locals.user.id,
+    createdAt: new Date()
+  };
 
   const product = new Product(req.body);
   product.save();
 
-  
   req.flash("success", "Thêm mới sản phẩm thành công!");
 
   res.redirect(`/${systemConfig.prefixAdmin}/products`);

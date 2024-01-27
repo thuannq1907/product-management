@@ -8,6 +8,7 @@ const systemConfig = require("./config/system.js");
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const path = require('path');
+const moment = require("moment");
 
 dotenv.config();
 
@@ -44,6 +45,7 @@ app.use(flash());
 
 // App local variables => tạo ra biến toàn cục, sd trong mọi file
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
+app.locals.moment = moment;
 
 // Routes Client
 routesClient(app);
