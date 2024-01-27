@@ -33,20 +33,25 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/products-category/create
 module.exports.createPost = async (req, res) => {
-  // console.log(req.body);
-  if(req.body.position == "") {
-    const countRecords = await ProductCategory.countDocuments();
-    req.body.position = countRecords + 1;
+  // Check xem có quyền thêm mới k để tránh ngta đưa data lên = Postman
+  if(res.locals.role.permissions.includes("products-category_create")){
+    if(req.body.position == "") {
+      const countRecords = await ProductCategory.countDocuments();
+      req.body.position = countRecords + 1;
+    } else {
+      req.body.position = parseInt(req.body.position);
+    }
+  
+    const record = new ProductCategory(req.body);
+    await record.save();
+  
+    req.flash("success", "Thêm mới danh mục sản phẩm thành công!");
+  
+    res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
   } else {
-    req.body.position = parseInt(req.body.position);
+    res.send("403");
   }
 
-  const record = new ProductCategory(req.body);
-  await record.save();
-
-  req.flash("success", "Thêm mới danh mục sản phẩm thành công!");
-
-  res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
   
 };
 
