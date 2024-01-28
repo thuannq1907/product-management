@@ -87,14 +87,17 @@ module.exports.changeStatus = async (req, res) => {
   const status = req.params.status;
   const id = req.params.id;
 
-  console.log(status);
-  console.log(id);
+  const objectUpdatedBy = {
+    accountId: res.locals.user.id,
+    updatedAt: new Date()
+  };
 
   // Thay đổi thuộc tính trong database
   await Product.updateOne({
     _id: id
   } , {
-    status: status
+    status: status,
+    $push: { updatedBy: objectUpdatedBy }
   });
 
   req.flash('success', 'Cập nhật trạng thái thành công');
@@ -275,11 +278,22 @@ module.exports.editPatch = async (req, res) => {
     if(req.file && req.file.filename){
       req.body.thumbnail = `/uploads/${req.file.filename}`;
     }
+
+    const objectupdatedBy = {
+      accountId: res.locals.user.id,
+      updatedAt: new Date()
+    };
   
     await Product.updateOne({
       _id: id,
       deleted: false
-    }, req.body);
+    }, {
+      ...req.body,
+      // spread syntax copy các phần tử ở req.body sang 
+      // Nó giống hệt như req.body nhưng có thể thêm vào các key khác
+      $push: { updatedBy: objectupdatedBy }
+      // Để tránh khi cập nhật bị ghi đè, push thêm vào mảng tên là updatedBy 1 object là objectupdatedBy (ĐÂY LÀ PUSH VÀO REQ.BODY, có thể viết là req.body.updatedBy.push)
+    });
   
     req.flash("success", "Cập nhật sản phẩm thành công!");
   
