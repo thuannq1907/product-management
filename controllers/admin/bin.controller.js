@@ -1,4 +1,5 @@
 const Product = require("../../models/product.model.js")
+const Account = require("../../models/account.model.js");
 const filterStateHelper = require("../../helpers/filter-state.helper.js");
 const paginationHelper = require("../../helpers/pagination.helper.js");
 const systemConfig = require("../../config/system.js");
@@ -8,6 +9,17 @@ module.exports.index = async (req, res) => {
     deleted: true
   }
   const products = await Product.find(find);
+  
+  for (const product of products) {
+    const account = await Account.findOne({
+      _id: product.deletedBy.accountId
+    });
+    
+    if(account) {
+      product.deletedBy.fullName = account.fullName;
+    }
+  }
+
   res.render("admin/pages/bin/index.pug", {
     pageTitle: "Sản phẩm đã xóa",
     products: products

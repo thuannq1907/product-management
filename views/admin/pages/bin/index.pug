@@ -4,6 +4,7 @@ include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
+include ../../mixins/moment.pug
 
 block main
   +alert-success(5000)
@@ -48,6 +49,7 @@ block main
             th Giá
             th Vị trí
             th Trạng thái
+            th Xóa bởi
             th Hành động
 
         tbody
@@ -94,6 +96,10 @@ block main
                     data-status=item.status
                     button-change-status
                     ) Dừng hoạt động
+              td 
+                p #{item.deletedBy.fullName}
+                if(item.deletedBy.deletedAt)
+                  +formatDateTime(item.deletedBy.deletedAt)
               td
                 button(
                   class="btn btn-warning btn-sm"

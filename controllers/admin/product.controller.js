@@ -68,7 +68,6 @@ module.exports.index = async (req, res) => {
       } 
     }
 
-
     res.render("admin/pages/products/index.pug", {
       pageTitle: "Trang danh sách sản phẩm",
       products: products,
@@ -130,7 +129,10 @@ module.exports.changeMulti = async (req, res) => {
           _id: { $in: ids }
         } , {
           deleted: true,
-          deletedAt: new Date()
+          deletedBy: {
+            accountId: res.locals.user.id,
+            deletedAt: new Date()
+          }
         });
 
         req.flash('success', 'Xóa sản phẩm thành công');
@@ -177,7 +179,10 @@ module.exports.deleteItem = async (req, res) => {
       _id: id
     }, {
       deleted: true,
-      deletedAt: new Date()
+      deletedBy: {
+        accountId: res.locals.user.id,
+        deletedAt: new Date()
+      }
     });
 
     req.flash('success', 'Xóa sản phẩm thành công');
