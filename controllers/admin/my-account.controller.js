@@ -1,6 +1,7 @@
 const md5 = require("md5");
 const Account = require("../../models/account.model");
 
+// Làm trang Thông tin cá nhân bên admin (Hiển thị thông tin)
 // [GET] /admin/my-account/
 module.exports.index = async (req, res) => {
   res.render("admin/pages/my-account/index.pug", {
