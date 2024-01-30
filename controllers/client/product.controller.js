@@ -1,4 +1,5 @@
 const Product = require("../../models/product.model");
+const ProductCategory = require("../../models/product-category.model");
 
 // [GET] /products/
 module.exports.index = async (req, res) => {
@@ -48,4 +49,34 @@ module.exports.detail = async (req, res) => {
   }
 }
 
+// [GET] /products/:slugCategory
+module.exports.category = async (req, res) => {
+  try {
+    const slugCategory = req.params.slugCategory;
 
+    // dựa vào slug -> lấy được danh mục, từ danh mục -> lấy được các product thông qua product_category_id
+    const category = await ProductCategory.findOne({
+      slug: slugCategory,
+      status: "active",
+      deleted: false
+    });
+  
+    const products = await Product.find({
+      product_category_id: category.id,
+      status: "active",
+      deleted: false
+    }).sort({ position: "desc" });
+  
+    for (const item of products) {
+      item.priceNew = (item.price * (100 - item.discountPercentage)/100).toFixed(0);
+    }
+  
+    res.render("client/pages/products/index.pug", {
+      pageTitle: "Danh sách sản phẩm",
+      products: products
+    });
+    
+  } catch (error) {
+    res.redirect("/");
+  }
+}
