@@ -27,10 +27,10 @@ module.exports.index = async (req, res) => {
   });
 }
 
-// [GET] /products/:slug
+// [GET] /products/detail/:slugProduct
 module.exports.detail = async (req, res) => {
   try {
-    const slug = req.params.slug;
+    const slug = req.params.slugProduct;
 
     const product = await Product.findOne({
       slug: slug,
@@ -38,6 +38,17 @@ module.exports.detail = async (req, res) => {
       status: "active"
     });
   
+    product.priceNew = (product.price * (100 - product.discountPercentage)/100).toFixed(0);
+
+    // Thêm phần giới thiệu danh mục sản phẩm ở trang chi tiết
+    if(product.product_category_id){
+      const category = await ProductCategory.findOne({
+        _id: product.product_category_id
+      });
+
+      product.category = category;
+    }
+    
     console.log(product);
     
     res.render("client/pages/products/detail.pug", {
