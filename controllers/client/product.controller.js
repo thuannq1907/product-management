@@ -60,9 +60,46 @@ module.exports.category = async (req, res) => {
       status: "active",
       deleted: false
     });
+
+    const getSubCategory = async (parentId) => {
+      const subs = await ProductCategory.find({
+        parent_id: parentId,
+        status: "active",
+        deleted: false
+      });
+
+      let allSubs = [...subs];
+      // <=> copy mảng subs để khi đệ quy xong thì add vào mảng này
+
+      // subs: Điện thoại => sub con bao gồm iphone và samsung, đệ quy tiếp để tìm con của 2 mục này
+      for (const sub of subs) {
+        const childs = await getSubCategory(sub.id);
+        // => Khi gọi đệ quy, các danh mục con đóng vai trò là các danh mục cha
+        allSubs = allSubs.concat(childs);
+        // concat để mối mảng
+      }
+
+      return allSubs;
+    }
+
+    const allCategory = await getSubCategory(category.id);
+    // => trả ra 1 mảng các danh mục con
+
+    const allCagegoryId = allCategory.map(item => item.id);
+    // => trả ra 1 mảng chỉ gồm id các danh mục con
+
+    // console.log(allCagegoryId);
+    // console.log(...allCagegoryId);
   
     const products = await Product.find({
-      product_category_id: category.id,
+      // tìm nhiều id của danh mục
+      product_category_id: {
+        $in: [
+          category.id,
+          ...allCagegoryId
+          // dùng spread syntax để copy các phần tử của mảng allCagegoryId
+        ]
+      },
       status: "active",
       deleted: false
     }).sort({ position: "desc" });
@@ -75,7 +112,7 @@ module.exports.category = async (req, res) => {
       pageTitle: "Danh sách sản phẩm",
       products: products
     });
-    
+
   } catch (error) {
     res.redirect("/");
   }
