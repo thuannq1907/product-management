@@ -49,8 +49,6 @@ module.exports.detail = async (req, res) => {
       product.category = category;
     }
     
-    console.log(product);
-    
     res.render("client/pages/products/detail.pug", {
       pageTitle: product.title,
       product: product
