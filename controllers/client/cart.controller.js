@@ -1,5 +1,46 @@
 const Cart = require("../../models/cart.model");
+const Product = require("../../models/product.model");
 
+// [GET] /cart/
+module.exports.index = async (req, res) => {
+  const cartId = req.cookies.cartId;
+
+  const cart = await Cart.findOne({
+    _id: cartId
+  });
+
+  // tính tổng tiền cả đơn hàng, thêm 1 key totalPrice vào giỏ hàng
+  cart.totalPrice = 0;
+
+  // lặp để lấy từng sản phẩm trong mảng products 
+  if(cart.products.length > 0) {
+    for (const item of cart.products) {
+      // lấy t.tin chi tiết sp thông qua id của sp trong giỏ hàng
+      const product = await Product.findOne({
+        _id: item.product_id
+      }).select("thumbnail title slug price discountPercentage");
+      // chỉ lấy những key cần thôi vì nếu lấy hết products sẽ dư nhiều t.tin
+
+      product.priceNew = (product.price * (100 - product.discountPercentage)/100).toFixed(0);
+
+      // lấy xong r thì add những key đó vào cart.products trong giỏ hàng
+      item.productInfo = product;
+
+      // tính tổng tiền theo số lượng của sp, totalPrice này là của sp trong products
+      item.totalPrice = item.quantity * product.priceNew;
+
+      // tính tổng tiền cả đơn hàng, totalPrice này là của giỏ hàng
+      cart.totalPrice += item.totalPrice;
+    }
+  }
+
+  res.render("client/pages/cart/index.pug", {
+    pageTitle: "Giỏ hàng",
+    cartDetail: cart
+  });
+}
+
+// [POST] /cart/add/:productId
 module.exports.addPost = async (req, res) => {
   // id sp user gửi lên
   const productId = req.params.productId;
