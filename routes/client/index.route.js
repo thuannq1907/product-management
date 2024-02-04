@@ -7,11 +7,13 @@ const userRoutes = require("./user.route")
 
 const categoryMiddleware = require("../../middlewares/client/category.middleware")
 const cartMiddleware = require("../../middlewares/client/cart.middleware")
+const userMiddleware = require("../../middlewares/client/user.middleware")
 
 module.exports = (app) => {
   // Vì cái danh mục sản phẩm này k cần bảo mật như authMiddleware nên có thể sd luôn
   app.use(categoryMiddleware.category);
   app.use(cartMiddleware.cart);
+  app.use(userMiddleware.infoUser);
 
   app.get("/", homeRoutes);
   
