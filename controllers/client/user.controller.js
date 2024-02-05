@@ -124,3 +124,42 @@ module.exports.forgotPasswordPost = async (req, res) => {
 
   res.redirect(`/user/password/otp?email=${email}`);
 };
+
+// [GET] /user/password/otp
+module.exports.otpPassword = async (req, res) => {
+  const email = req.query.email;
+
+  res.render("client/pages/user/otp-password.pug", {
+    pageTitle: "Nhập mã OTP",
+    email: email,
+  });
+};
+
+// [POST] /user/password/otp
+module.exports.otpPasswordPost = async (req, res) => {
+  const email = req.body.email;
+  const otp = req.body.otp;
+
+  const find = {
+    email: email,
+    otp: otp
+  };
+
+  const result = await ForgotPassword.findOne(find);
+
+  if(!result) {
+    req.flash("error", "OTP không hợp lệ!");
+    res.redirect("back");
+    return;
+  }
+
+  const user = await User.findOne({
+    email: email
+  });
+
+  // khi xác thực thành công thì trả về token của tk đó, coi như đăng nhập thành công luôn
+  res.cookie("tokenUser", user.tokenUser);
+
+  // xác thực xong thì đổi mật khẩu
+  res.redirect(`/user/password/reset`);
+};
