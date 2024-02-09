@@ -39,6 +39,8 @@ header.header
               a(href="/cart") Giỏ hàng (#{cart ? cart.products.length : 0})
             if(user)
               li
+                a(href="/user/info") Tài khoản
+              li
                 a(href="/user/logout") Đăng xuất
             else
               li
