@@ -53,6 +53,15 @@ routesClient(app);
 // Routes Admin
 routesAdmin(app);
 
+// 404 Not Found (những route k tồn tại), ngoài 2 route chính là client và admin thì redirect hết về trang 404
+app.get("*", (req, res) => {
+  res.render("client/pages/errors/404.pug", {
+    pageTitle: "404 Not Found",
+  });
+  // muốn chuẩn SEO thì back về trang chủ
+  // res.redirect("/");
+});
+
 app.listen(port, () => {
   console.log(`App listening on ${port}`);
 });
