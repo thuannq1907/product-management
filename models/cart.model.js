@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 
 const cartSchema = new mongoose.Schema(
   {
-    // user_id: String,
+    user_id: String,
+    // lưu thêm user_id để bt giỏ hàng của ai
     products: [
       {
         product_id: String,

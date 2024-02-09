@@ -1,6 +1,7 @@
 const md5 = require("md5");
 const User = require("../../models/user.model");
 const ForgotPassword = require("../../models/forgot-password.model");
+const Cart = require("../../models/cart.model");
 
 const generateHelper = require("../../helpers/generate.helper");
 const sendMailHelper = require("../../helpers/send-mail.helper");
@@ -77,6 +78,13 @@ module.exports.loginPost = async (req, res) => {
 
   // có token trên cookie để nhận bt xem user đã đăng nhập chưa thông qua middleware, từ middleware trả ra t.tin user để sử dụng xuyên suốt các trang
   res.cookie("tokenUser", user.tokenUser);
+
+  // khi đăng nhập thành công ngoài việc đưa token lên cookie thì lưu id của user này vào giỏ hàng luôn (lấy giỏ hàng thông qua cookie để đưa id user vào)
+  await Cart.updateOne({
+    _id: req.cookies.cartId
+  }, {
+    user_id: user.id
+  });
 
   res.redirect("/");
 };
