@@ -29,9 +29,8 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-io.on("connection", (socket) => {
-  console.log("Kết nối thành công!", socket.id)
-});
+global._io = io;
+// tạo ra biến toàn cục tên là _io để sd ở cả những file js còn locals chỉ sd đc ở bên pug
 // End SocketIO
 
 
