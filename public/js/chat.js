@@ -117,6 +117,7 @@ socket.on("SERVER_RETURN_TYPING", (data) => {
     // ktra xem đã tồn tại typing chưa, chưa thì appendChild vào inner-list-typing
     const existTyping = elementListTyping.querySelector(`.box-typing[user-id="${data.userId}"]`);
 
+    // khi đang soạn tin nhắn thì typing hiện ở dưới (hoặc có thể fix position của typing)
     const body = document.querySelector(".chat .inner-body");
 
     // Nếu k tồn tại -> insert vào
@@ -134,6 +135,7 @@ socket.on("SERVER_RETURN_TYPING", (data) => {
       `;
 
       elementListTyping.appendChild(boxTyping);
+      body.scrollTop = body.scrollHeight;
     } 
   } else {
     // type = hidden -> remove
