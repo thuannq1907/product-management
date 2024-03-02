@@ -26,6 +26,19 @@ module.exports.index = async (req, res) => {
         content: content
       });
     });
+
+
+    // Typing
+    // bắt sự kiện CLIENT_SEND_TYPING (khi ng dùng nhập bàn phím)
+    socket.on("CLIENT_SEND_TYPING", (type) => {
+      // phát ra cho những ng khác nhận
+      socket.broadcast.emit("SERVER_RETURN_TYPING", {
+        userId: userId,
+        fullName: fullName,
+        type: type
+      })
+    })
+
   });
   // End SocketIO
 
