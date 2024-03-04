@@ -1,5 +1,18 @@
 import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js'
 
+// Upload Image
+// UP 1 ẢNH
+// const upload = new FileUploadWithPreview.FileUploadWithPreview('upload-images');
+
+// UP NHIỀU ẢNH
+const upload = new FileUploadWithPreview.FileUploadWithPreview('upload-images', {
+  multiple: true,
+  maxFileCount: 6
+  // đc up tối đa 6 ảnh
+});
+// End Upload Image
+
+
 // CLIENT_SEND_MESSAGE
 const formSendData = document.querySelector(".chat .inner-form");
 if(formSendData) {
@@ -7,11 +20,18 @@ if(formSendData) {
   formSendData.addEventListener("submit", (event) => {
     event.preventDefault();
     const content = inputContent.value;
-    if(content) {
-      socket.emit("CLIENT_SEND_MESSAGE", content);
+    // k up ảnh thì ảnh là 1 mảng rỗng
+    const images = upload.cachedFileArray || [];
+    if(content || images.length > 0) {
+      socket.emit("CLIENT_SEND_MESSAGE", {
+        content: content,
+        images: images
+      });
       inputContent.value = "";
       // khi gửi tin nhắn thì tắt typing luôn
       socket.emit("CLIENT_SEND_TYPING", "hidden");
+      // up lên xong thì xóa ảnh đã chọn
+      upload.resetPreviewPanel();
     }
   });
 }
