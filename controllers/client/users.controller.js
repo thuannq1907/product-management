@@ -1,12 +1,28 @@
 const User = require("../../models/user.model");
 
+const usersSocket = require("../../sockets/client/users.socket");
+
 // [GET] /users/not-friend
 module.exports.notFriend = async (req, res) => {
+  // SocketIO
+  usersSocket(res);
+  // End SocketIO
+
   const userId = res.locals.user.id;
 
+  const requestFriends = res.locals.user.requestFriends;
+  const acceptFriends = res.locals.user.acceptFriends;
+
   const users = await User.find({
-    // ne: not equal => lấy những phần tử có id k = vs userId
-    _id: { $ne: userId },
+    // tìm những phần tử có id khác vs userId (id của chúng ta), k có trong cả requestFriends và acceptFriends
+    // kết hợp nhiều điều kiện 
+    $and: [
+      // not equal => những id khác userId
+      { _id: { $ne: userId } },
+      // not in => tìm những id không tồn tại trong mảng
+      { _id: { $nin: requestFriends } },
+      { _id: { $nin: acceptFriends } }
+    ],
     status: "active",
     deleted: false
   }).select("id fullName avatar");
