@@ -42,11 +42,12 @@ if(formSendData) {
 socket.on("SERVER_SEND_MESSAGE", (data) => {
   const body = document.querySelector(".chat .inner-body");
   const elementListTyping = body.querySelector(".inner-list-typing");
-  // myId là id của tk khi đăng nhập còn data.userId là id của ng gửi tin nhắn (id này cx đc lấy khi đăng nhập) => so sánh
   const myId = document.querySelector("[my-id]").getAttribute("my-id");
 
   const div = document.createElement("div");
   let htmlFullName = "";
+  let htmlContent = "";
+  let htmlImages = "";
 
   if(myId != data.userId) {
     div.classList.add("inner-incoming");
@@ -55,9 +56,30 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
     div.classList.add("inner-outgoing");
   }
 
+  if(data.content) {
+    htmlContent = `
+      <div class="inner-content">${data.content}</div>
+    `;
+  }
+
+  if(data.images.length > 0) {
+    // Nối chuỗi
+    htmlImages += `<div class="inner-images">`;
+
+    // data.images là 1 mảng chứa các link ảnh Cloudinary
+    for (const image of data.images) {
+      htmlImages += `
+        <img src="${image}">
+      `;
+    }
+
+    htmlImages += `</div>`;
+  }
+
   div.innerHTML = `
     ${htmlFullName}
-    <div class="inner-content">${data.content}</div>
+    ${htmlContent}
+    ${htmlImages}
   `
 
   // thêm thẻ div vừa tạo vào trước typing
