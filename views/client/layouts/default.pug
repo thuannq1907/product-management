@@ -7,6 +7,8 @@ html
 
     link(rel="stylesheet", href="https://unpkg.com/file-upload-with-preview/dist/style.css")
 
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.css")
+
     link(rel="stylesheet", href="/css/style.css")
   body 
     include ../partials/header.pug
@@ -23,6 +25,9 @@ html
 
     //- chèn ảnh
     script(src="https://unpkg.com/file-upload-with-preview/dist/file-upload-with-preview.iife.js") 
+
+    //- hiển thị ảnh full màn hình
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.js") 
 
     script(src="/socket.io/socket.io.js")
     script(src="/js/socket.js")

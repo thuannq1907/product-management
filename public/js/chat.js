@@ -87,6 +87,9 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
 
   // Để khi load lại hay gửi tin nhắn thì thanh scroll luôn ở dưới cùng
   body.scrollTop = body.scrollHeight;
+
+  // tin nhắn real time có thể view luôn mà k cần load lại trang
+  const gallery = new Viewer(div);
 })
 // End SERVER_SEND_MESSAGE
 
@@ -189,3 +192,11 @@ socket.on("SERVER_RETURN_TYPING", (data) => {
   }
 });
 // End SERVER_RETURN_TYPING
+
+// Preview Image
+// truy vấn đến thẻ cha bên ngoài các ảnh thì tất cả ảnh bên trong sẽ view lên được
+// chỉ chạy khi load lại trang -> tin nhắn realtime muốn view -> load lại -> xử lý luôn khi up tin nhắn
+if(bodyChat) {
+  const gallery = new Viewer(bodyChat);
+}
+// End Preview Image
