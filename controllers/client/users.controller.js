@@ -12,6 +12,9 @@ module.exports.notFriend = async (req, res) => {
 
   const requestFriends = res.locals.user.requestFriends;
   const acceptFriends = res.locals.user.acceptFriends;
+  const friendsListId = res.locals.user.friendsList.map(item => item.user_id);
+  // vì friendsListId là 1 mảng object => sd map để lặp lấy hết id
+  // => lúc này friendsListId là 1 mảng các id chứ k còn là 1 mảng các object nữa
 
   const users = await User.find({
     // tìm những phần tử có id khác vs userId (id của chúng ta), k có trong cả requestFriends và acceptFriends
@@ -21,7 +24,8 @@ module.exports.notFriend = async (req, res) => {
       { _id: { $ne: userId } },
       // not in => tìm những id không tồn tại trong mảng
       { _id: { $nin: requestFriends } },
-      { _id: { $nin: acceptFriends } }
+      { _id: { $nin: acceptFriends } },
+      { _id: { $nin: friendsListId } }
     ],
     status: "active",
     deleted: false
@@ -75,6 +79,24 @@ module.exports.accept = async (req, res) => {
 
   res.render("client/pages/users/accept.pug", {
     pageTitle: "Lời mời đã nhận",
+    users: users
+  });
+};
+
+// [GET] /users/friends
+module.exports.friends = async (req, res) => {
+  const friendsListId = res.locals.user.friendsList.map(item => item.user_id);
+  // 1 mảng các id trong friendsListId
+
+  const users = await User.find({
+    // tìm tất cả id có trong friendsListId
+    _id: { $in: friendsListId },
+    status: "active",
+    deleted: false
+  }).select("id fullName avatar");
+
+  res.render("client/pages/users/friends.pug", {
+    pageTitle: "Danh sách bạn bè",
     users: users
   });
 };

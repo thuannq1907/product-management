@@ -8,7 +8,7 @@ block main
 
     .row
       .col-12
-        +box-head("Lời mời kết bạn")
+        +box-head("Danh sách bạn bè")
 
     .row
       each user in users
@@ -24,22 +24,8 @@ block main
               div(class="inner-buttons")
                 button(
                   class="btn btn-sm btn-primary mr-1"
-                  btn-accept-friend=user.id
-                ) Chấp nhận
-                button(
-                  class="btn btn-sm btn-secondary mr-1"
-                  btn-refuse-friend=user.id
-                ) Xóa
-                button(
-                  class="btn btn-sm btn-secondary mr-1"
-                  btn-deleted-friend
-                  disabled
-                ) Đã xóa
-                button(
-                  class="btn btn-sm btn-primary mr-1"
-                  btn-accepted-friend
-                  disabled
-                ) Đã chấp nhận
+                ) Nhắn tin
+
 
 block script
   script( src="/js/users.js")
