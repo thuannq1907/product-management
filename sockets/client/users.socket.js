@@ -52,6 +52,18 @@ module.exports = (res) => {
         userId: userIdB,
         lengthAcceptFriends: lengthAcceptFriendsB
       });
+
+      // Lấy thông tin của A để trả về cho B để in ra bên phần lời mời kb của B (real time)
+      const infoUserA = await User.findOne({
+        _id: userIdA
+      }).select("id fullName avatar");
+
+      socket.broadcast.emit("SERVER_RETURN_INFO_ACCEPT_FRIEND", {
+        userIdB: userIdB,
+        infoUserA: infoUserA
+      });
+
+
     })
 
     // Khi A hủy gửi yêu cầu cho B
