@@ -79,10 +79,11 @@ socket.on("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", (data) => {
 socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND", (data) => {
   const dataUsersAccept = document.querySelector(`[data-users-accept="${data.userIdB}"]`);
   if(dataUsersAccept) {
-    console.log(data.infoUserA);
+    // console.log(data.infoUserA);
 
     const newBoxUser = document.createElement("div");
     newBoxUser.classList.add("col-6");
+    newBoxUser.setAttribute("user-id", data.infoUserA._id)
 
     newBoxUser.innerHTML = `
       <div class="box-user">
@@ -129,7 +130,7 @@ socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND", (data) => {
 
     // vì box user khi gửi yêu cầu mới được vẽ ra -> các button phải load lại trang mới có chức năng
     // => thêm luôn chức năng cho các button khi vừa được vẽ ra
-    
+
     // Xóa lời mời kết bạn
     const buttonRefuse = newBoxUser.querySelector("[btn-refuse-friend]");
     buttonRefuse.addEventListener("click", () => {
@@ -154,3 +155,19 @@ socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND", (data) => {
   }
 });
 // End SERVER_RETURN_INFO_ACCEPT_FRIEND
+
+
+
+// SERVER_RETURN_ID_CANCEL_FRIEND
+socket.on("SERVER_RETURN_ID_CANCEL_FRIEND", (data) => {
+  // Đây là giao diện của B (chứa tất cả lời mời kb)
+  const dataUsersAccept = document.querySelector(`[data-users-accept="${data.userIdB}"]`);
+  // check xem nếu tồn tại giao diện B thì tìm A để xóa
+  if(dataUsersAccept) {
+    const boxUserA = dataUsersAccept.querySelector(`[user-id="${data.userIdA}"]`);
+    if(boxUserA) {
+      dataUsersAccept.removeChild(boxUserA);
+    }
+  }
+});
+// End SERVER_RETURN_ID_CANCEL_FRIEND

@@ -87,17 +87,23 @@ module.exports = (res) => {
         $pull: { requestFriends: userIdB }
       })
 
-        // Lấy độ dài acceptFriends của B để trả về cho B
-        const infoUserB = await User.findOne({
-          _id: userIdB
-        }).select("acceptFriends");
-  
-        const lengthAcceptFriendsB = infoUserB.acceptFriends.length;
-  
-        socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", {
-          userId: userIdB,
-          lengthAcceptFriends: lengthAcceptFriendsB
-        });
+      // Lấy độ dài acceptFriends của B để trả về cho B
+      const infoUserB = await User.findOne({
+        _id: userIdB
+      }).select("acceptFriends");
+
+      const lengthAcceptFriendsB = infoUserB.acceptFriends.length;
+
+      socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", {
+        userId: userIdB,
+        lengthAcceptFriends: lengthAcceptFriendsB
+      });
+
+      // Lấy userId của A trả về cho B để B xóa A khỏi danh sách Lời mời kết bạn
+      socket.broadcast.emit("SERVER_RETURN_ID_CANCEL_FRIEND", {
+        userIdB: userIdB,
+        userIdA: userIdA
+      });
     })
 
     // Khi B từ chối kết bạn của A
