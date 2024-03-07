@@ -86,12 +86,27 @@ module.exports.loginPost = async (req, res) => {
     user_id: user.id
   });
 
+  // Khi đăng nhập thành công thì update statusOnline là online
+  await User.updateOne({
+    _id: user.id
+  }, {
+    statusOnline: "online"
+  });
+
   res.redirect("/");
 };
 
 // [GET] /user/logout
 module.exports.logout = async (req, res) => {
   res.clearCookie("tokenUser");
+
+  // Khi đăng xuất thì update statusOnline là offline
+  await User.updateOne({
+    _id: res.locals.user.id
+  }, {
+    statusOnline: "offline"
+  });
+
   res.redirect("/");
 };
 
