@@ -40,6 +40,18 @@ module.exports = (res) => {
           $push: { requestFriends: userIdB }
         })
       }
+
+      // Lấy độ dài acceptFriends của B để trả về cho B
+      const infoUserB = await User.findOne({
+        _id: userIdB
+      }).select("acceptFriends");
+
+      const lengthAcceptFriendsB = infoUserB.acceptFriends.length;
+
+      socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", {
+        userId: userIdB,
+        lengthAcceptFriends: lengthAcceptFriendsB
+      });
     })
 
     // Khi A hủy gửi yêu cầu cho B

@@ -63,3 +63,13 @@ if(listBtnAcceptFriend.length > 0) {
   });
 }
 // Hết Chấp nhận lời mời kết bạn
+
+
+// SERVER_RETURN_LENGTH_ACCEPT_FRIEND
+socket.on("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", (data) => {
+  // truy vấn ra thẻ span có id đúng = id đã đăng nhập để insert chứ k phải id nào cx insert
+  const badgeUsersAccept = document.querySelector(`[badge-users-accept="${data.userId}"]`);
+  // insert data.lengthAcceptFriends vào thẻ span đó = innerHTML
+  badgeUsersAccept.innerHTML = data.lengthAcceptFriends;
+});
+// End SERVER_RETURN_LENGTH_ACCEPT_FRIEND
