@@ -85,7 +85,9 @@ module.exports.accept = async (req, res) => {
 
 // [GET] /users/friends
 module.exports.friends = async (req, res) => {
-  const friendsListId = res.locals.user.friendsList.map(item => item.user_id);
+  const friendsList = res.locals.user.friendsList;
+  // mảng những ng bạn của A (bạn của tk đăng nhập)
+  const friendsListId = friendsList.map(item => item.user_id);
   // 1 mảng các id trong friendsListId
 
   const users = await User.find({
@@ -94,6 +96,15 @@ module.exports.friends = async (req, res) => {
     status: "active",
     deleted: false
   }).select("id fullName avatar statusOnline");
+  // k thể select thêm friendsList đc vì nó lấy thêm cả mảng bạn của B và của cả C
+
+  // add thêm room_chat_id (lấy ra từ friendsList của A khi kết bạn thành công)
+  for (const user of users) {
+    // tìm đúng id của ng bạn đó trong friendsList để add room_chat_id cho đúng
+    const infoUser = friendsList.find(item => item.user_id == user.id);
+    user.roomChatId = infoUser.room_chat_id;
+    // => add room_chat_id vào từng user
+  }
 
   res.render("client/pages/users/friends.pug", {
     pageTitle: "Danh sách bạn bè",

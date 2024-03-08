@@ -3,7 +3,7 @@ const User = require("../../models/user.model");
 
 const chatSocket = require("../../sockets/client/chat.socket");
 
-// [GET] /chat/
+// [GET] /chat/:roomChatId
 module.exports.index = async (req, res) => {
 
   // SocketIO

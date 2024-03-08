@@ -1,3 +1,4 @@
+const RoomChat = require("../../models/rooms-chat.model.js");
 const User = require("../../models/user.model");
 
 module.exports = (res) => {
@@ -132,6 +133,23 @@ module.exports = (res) => {
     socket.on("CLIENT_ACCEPT_FRIEND", async (userIdA) => {
       const userIdB = res.locals.user.id;
 
+      // Tạo phòng chat mới giữa A và B (2 người)
+      const roomChat = new RoomChat({
+        typeRoom: "friend",
+        users: [
+          {
+            user_id: userIdA,
+            role: "superAdmin"
+          },
+          {
+            user_id: userIdB,
+            role: "superAdmin"
+          }
+        ],
+      });
+
+      await roomChat.save();
+
       // Thêm {user_id, room_chat_id} của A vào friendsList của B
       // Xóa id của A trong acceptFriends của B
       await User.updateOne({
@@ -141,7 +159,7 @@ module.exports = (res) => {
         $push: {
           friendsList: {
             user_id: userIdA,
-            room_chat_id: ""
+            room_chat_id: roomChat.id
           }
         },
         // pull phần tử userIdA khỏi mảng acceptFriends của userIdB
@@ -158,7 +176,7 @@ module.exports = (res) => {
         $push: {
           friendsList: {
             user_id: userIdB,
-            room_chat_id: ""
+            room_chat_id: roomChat.id
           }
         },
         // pull phần tử userIdB khỏi mảng requestFriends của userIdA
