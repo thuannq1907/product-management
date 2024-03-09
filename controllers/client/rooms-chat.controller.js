@@ -3,8 +3,20 @@ const RoomChat = require("../../models/rooms-chat.model.js");
 
 // [GET] /rooms-chat/
 module.exports.index = async (req, res) => {
+  const userId = res.locals.user.id;
+
+  // hiển thị tất cả danh sách phòng chat của user (tk đang đăng nhập)
+  const listRoomChat = await RoomChat.find({
+    // những phòng mà có id của A bên trong
+    "users.user_id": userId,
+    typeRoom: "group",
+    deleted: false
+  });
+
+
   res.render("client/pages/rooms-chat/index.pug", {
     pageTitle: "Danh sách phòng",
+    listRoomChat: listRoomChat
   });
 };
 
